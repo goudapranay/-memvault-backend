@@ -1,6 +1,7 @@
 """
 utils/auth_helpers.py  –  JWT creation, verification, Google OAuth flow
 """
+import os
 import json
 import uuid
 import logging
@@ -52,7 +53,9 @@ def get_google_flow() -> Flow:
     flow = Flow.from_client_config(
         client_config,
         scopes=[
-            "openid", "email", "profile",
+            "openid",
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/drive.file",
         ],
         redirect_uri=settings.google_redirect_uri,
@@ -70,6 +73,7 @@ async def get_or_create_user_from_google(
     try:
         flow = get_google_flow()
         flow.fetch_token(code=code)
+	os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
         creds = flow.credentials
 
         # Get user info from Google
