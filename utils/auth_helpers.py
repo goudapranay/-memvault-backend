@@ -72,6 +72,7 @@ async def get_or_create_user_from_google(
     """
     try:
         flow = get_google_flow()
+	os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
         flow.fetch_token(code=code)
 	os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
         creds = flow.credentials
