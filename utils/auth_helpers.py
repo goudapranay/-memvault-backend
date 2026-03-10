@@ -1,5 +1,5 @@
 """
-utils/auth_helpers.py  –  JWT creation, verification, Google OAuth flow
+utils/auth_helpers.py  -  JWT creation, verification, Google OAuth flow
 """
 import os
 import json
@@ -71,10 +71,9 @@ async def get_or_create_user_from_google(
     Exchange authorization code for tokens, get user info, upsert User row.
     """
     try:
+        os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
         flow = get_google_flow()
-	os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
         flow.fetch_token(code=code)
-	os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
         creds = flow.credentials
 
         # Get user info from Google
